@@ -10,17 +10,14 @@ pool:
 steps:
 
 - script: |
+    ls -l ./
+    echo '-------------------------------'
+    ls -l ../
     wget https://github.com/github/codeql-action/releases/latest/download/codeql-bundle-linux64.tar.gz -O ../codeql-bundle-linux64.tar.gz
     tar xzvf ../codeql-bundle-linux64.tar.gz -C ../
     rm ../codeql-bundle-linux64.tar.gz
     export PATH=$(cd ..; pwd)/codeql:$PATH
     codeql version
-  displayName: 'Install CodeQL'
-
-- script: |
-    ls -l ./
-    echo '-------------------------------'
-    ls -l ../
     codeql \
       database create \
       --command ./compile \
@@ -28,7 +25,7 @@ steps:
       --github-url=https://github.com/ \
       --source-root . \
       ../db
-  displayName: Extract Code
+  displayName: 'Run analysis'
 
 #        # Create CodeQL Database
 #        # Create a CodeQL database for a source tree that can be analyzed using one of the CodeQL products.
