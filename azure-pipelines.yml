@@ -10,43 +10,28 @@ pool:
 steps:
 
 - script: |
-    ls -l ./
-    echo '-------------------------------'
-    ls -l ../
-    wget https://github.com/github/codeql-action/releases/latest/download/codeql-bundle-linux64.tar.gz -O ../codeql-bundle-linux64.tar.gz
-    tar xzvf ../codeql-bundle-linux64.tar.gz -C ../
-    rm ../codeql-bundle-linux64.tar.gz
-    export PATH=$(cd ..; pwd)/codeql:$PATH
+    wget \
+      "https://github.com/github/codeql-action/releases/latest/download/codeql-bundle-linux64.tar.gz" \
+      -O "../codeql-bundle-linux64.tar.gz"
+    tar xzvf "../codeql-bundle-linux64.tar.gz" -C ../
+    rm "../codeql-bundle-linux64.tar.gz"
+    export PATH="../codeql:${PATH}"
     codeql version
     codeql \
       database create \
-      --command ./compile \
+      --command "./compile" \
       --language java \
-      --github-url=https://github.com/ \
+      --github-url "https://github.com/" \
       --source-root . \
-      ../db
+      "../db"
+    codeql \
+      database analyze \
+      --format sarif-latest \
+      --output "../results.sarif" \
+      "../db" \
+      java-code-scanning.qls
   displayName: 'Run analysis'
 
-#        # Create CodeQL Database
-#        # Create a CodeQL database for a source tree that can be analyzed using one of the CodeQL products.
-#        # Note that if the --command flag is omitted for compiled languages, the AutoBuilder will be used. For complex build instructions, consider placing build commands inside a script
-#        # and pass that to --command, or use indirect build tracing (aka. "sandwich mode").
-#        # Full documentation for database create step: https://codeql.github.com/docs/codeql-cli/manual/database-create/
-#        - task: ShellScript@2
-#            displayName: Create CodeQL Database
-#            inputs:
-#                script: "codeql database create --language=javascript --github-auth-stdin --github-url=https://github.com/ --source-root /checkouts/my-repo db"
-#
-#        # Analyze CodeQL Database
-#        # Analyze a CodeQL database, producing meaningful results in the context of the source code.
-#        # Run a query suite (or some individual queries) against a CodeQL database, producing results, styled as alerts or paths, in SARIF or another interpreted format.
-#        # Note that the suite argument can accept one of the pre-compiled, out-of-the-box query suites: code-scanning, security-extended, or security-and-quality
-#        # Full documentation for database analyze step: https://codeql.github.com/docs/codeql-cli/manual/database-analyze/
-#        - task: ShellScript@3
-#            displayName: Analyze CodeQL Database
-#            inputs:
-#                script: "codeql database analyze --format=sarif-latest --output=./temp/results-js.sarif db javascript-security-and-quality.qls"
-#
 #        # Upload results to GitHub
 #        # Uploads a SARIF file to GitHub code scanning.
 #        # For context, please see https://docs.github.com/en/rest/reference/code-scanning#upload-an-analysis-as-sarif-data
