@@ -8,6 +8,7 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+
 - script: |
     wget https://github.com/github/codeql-action/releases/latest/download/codeql-bundle-linux64.tar.gz -O ../codeql-bundle-linux64.tar.gz
     tar xzvf ../codeql-bundle-linux64.tar.gz -C ../
@@ -16,6 +17,18 @@ steps:
     codeql version
   displayName: 'Install CodeQL'
 
+- script: |
+    ls -l ./
+    echo '-------------------------------'
+    ls -l ../
+    codeql \
+      database create \
+      --command ./compile \
+      --language java \
+      --github-url=https://github.com/ \
+      --source-root . \
+      ../db
+  displayName: Extract Code
 
 #        # Create CodeQL Database
 #        # Create a CodeQL database for a source tree that can be analyzed using one of the CodeQL products.
