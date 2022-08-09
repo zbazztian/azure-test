@@ -10,6 +10,7 @@ pool:
 steps:
 
 - script: |
+    printenv
     # download the toolchain
     wget \
       "https://github.com/github/codeql-action/releases/latest/download/codeql-bundle-linux64.tar.gz" \
