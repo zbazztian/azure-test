@@ -14,37 +14,28 @@ steps:
       "https://github.com/github/codeql-action/releases/latest/download/codeql-bundle-linux64.tar.gz" \
       -O "../codeql-bundle-linux64.tar.gz"
     tar xzvf "../codeql-bundle-linux64.tar.gz" -C ../
-    rm "../codeql-bundle-linux64.tar.gz"
+    rm '../codeql-bundle-linux64.tar.gz'
     export PATH="../codeql:${PATH}"
     codeql version
     codeql \
       database create \
-      --command "./compile" \
+      --command './compile' \
       --threads 0 \
       --language java \
-      --github-url "https://github.com/" \
+      --github-url 'https://github.com/' \
       --source-root . \
-      "../db"
+      '../db'
     codeql \
       database analyze \
       --threads 0 \
       --format sarif-latest \
-      --output "../results.sarif" \
-      "../db" \
+      --output '../results.sarif' \
+      '../db' \
       java-code-scanning.qls
-  displayName: 'Run analysis'
-
-#        # Upload results to GitHub
-#        # Uploads a SARIF file to GitHub code scanning.
-#        # For context, please see https://docs.github.com/en/rest/reference/code-scanning#upload-an-analysis-as-sarif-data
-#        # A GitHub Apps token or personal access token must be set. For best security practices, it is recommended to set the --github-auth-stdin flag and pass the token to the command through standard input. Alternatively, the GITHUB\_TOKEN environment variable can be set.
-#        # This token must have the security\_events scope.
-#        # Documentation for creating GitHub Apps or Personal Access Tokens are available here: https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token
-#        # Full documentation for github upload-results step: https://codeql.github.com/docs/codeql-cli/manual/github-upload-results/
-#        - task: ShellScript@4
-#            displayName: Upload results to GitHub
-#            inputs:
-#                script: "codeql github upload-results --sarif=./temp/results-js.sarif --github-auth-stdin --github-url=https://github.com/ --repository=octo-org/example-repo-2 --ref=refs/heads/main --commit=deb275d2d5fe9a522a0b7bd8b6b6a1c939552718"
-#
-#        # Other tasks go here
-#
+    codeql \
+      github upload-results \
+      --sarif '../results.sarif' \
+      --github-url 'https://github.com/' \
+      --repository 'zbazztian/azure-test' \
+      --ref 'refs/heads/main' \
+      --commit "$(git rev-parse HEAD)"
