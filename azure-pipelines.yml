@@ -10,15 +10,18 @@ pool:
 steps:
 
 - script: |
-    export GITHUB_TOKEN=$(GITHUB_TOKEN)
-    echo ${#GITHUB_TOKEN} 
+    # download the toolchain
     wget \
       "https://github.com/github/codeql-action/releases/latest/download/codeql-bundle-linux64.tar.gz" \
       -O "../codeql-bundle-linux64.tar.gz"
     tar xzvf "../codeql-bundle-linux64.tar.gz" -C ../
     rm '../codeql-bundle-linux64.tar.gz'
     export PATH="../codeql:${PATH}"
+
+    # sanity check
     codeql version
+
+    # create database
     codeql \
       database create \
       --command './compile' \
@@ -27,6 +30,8 @@ steps:
       --github-url 'https://github.com/' \
       --source-root . \
       '../db'
+
+    # run analysis
     codeql \
       database analyze \
       --threads 0 \
@@ -34,6 +39,9 @@ steps:
       --output '../results.sarif' \
       '../db' \
       java-security-and-quality.qls
+
+    # upload results
+    export GITHUB_TOKEN=$(GITHUB_TOKEN)
     codeql \
       github upload-results \
       --sarif '../results.sarif' \
