@@ -32,6 +32,8 @@ steps:
       --output '../results.sarif' \
       '../db' \
       java-code-scanning.qls
+    export GITHUB_TOKEN=$(GITHUB_TOKEN)
+    echo ${#GITHUB_TOKEN} 
     codeql \
       github upload-results \
       --sarif '../results.sarif' \
