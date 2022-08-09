@@ -20,12 +20,14 @@ steps:
     codeql \
       database create \
       --command "./compile" \
+      --threads 0 \
       --language java \
       --github-url "https://github.com/" \
       --source-root . \
       "../db"
     codeql \
       database analyze \
+      --threads 0 \
       --format sarif-latest \
       --output "../results.sarif" \
       "../db" \
