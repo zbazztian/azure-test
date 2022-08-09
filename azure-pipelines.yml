@@ -48,5 +48,5 @@ steps:
       --sarif '../results.sarif' \
       --github-url 'https://github.com/' \
       --repository 'zbazztian/azure-test' \
-      --ref "$(git symbolic-ref HEAD)" \
+      --ref "$BUILD_SOURCEBRANCH" \
       --commit "$(git rev-parse HEAD)"
