@@ -33,7 +33,7 @@ steps:
       --format sarif-latest \
       --output '../results.sarif' \
       '../db' \
-      java-code-scanning.qls
+      java-security-and-quality.qls
     codeql \
       github upload-results \
       --sarif '../results.sarif' \
