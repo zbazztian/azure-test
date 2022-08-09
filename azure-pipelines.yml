@@ -10,6 +10,8 @@ pool:
 steps:
 
 - script: |
+    export GITHUB_TOKEN=$(GITHUB_TOKEN)
+    echo ${#GITHUB_TOKEN} 
     wget \
       "https://github.com/github/codeql-action/releases/latest/download/codeql-bundle-linux64.tar.gz" \
       -O "../codeql-bundle-linux64.tar.gz"
@@ -32,8 +34,6 @@ steps:
       --output '../results.sarif' \
       '../db' \
       java-code-scanning.qls
-    export GITHUB_TOKEN=$(GITHUB_TOKEN)
-    echo ${#GITHUB_TOKEN} 
     codeql \
       github upload-results \
       --sarif '../results.sarif' \
