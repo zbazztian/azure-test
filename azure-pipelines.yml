@@ -31,9 +31,15 @@ steps:
     codeql version
 
     # create database
+    if [ "$(lang)" = "java" ]; then
+      build_command="--command '/.compile'"
+    else
+      build_command=""
+    fi
+
     codeql \
       database create \
-      --command './compile' \
+      $build_command \
       --threads 0 \
       --language '$(lang)' \
       --github-url 'https://github.com/' \
