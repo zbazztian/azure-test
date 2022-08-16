@@ -33,7 +33,7 @@ steps:
 
     # create database
     if [ "$(lang)"="java" ]; then
-      build_command="--command './compile'"
+      build_command="--command ./compile"
     else
       build_command=""
     fi
