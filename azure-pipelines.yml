@@ -31,8 +31,8 @@ steps:
     codeql version
 
     # create database
-    if [ "$(lang)" = "java" ]; then
-      build_command="--command '/.compile'"
+    if [ "$(lang)"="java" ]; then
+      build_command="--command './compile'"
     else
       build_command=""
     fi
