@@ -4,6 +4,15 @@ trigger:
   branches:
     include: [main]
 
+strategy:
+  matrix:
+    java:
+      lang: 'java'
+    javascript:
+      lang: 'javascript'
+    python:
+      lang: 'python'
+
 pool:
   vmImage: ubuntu-latest
 
@@ -26,7 +35,7 @@ steps:
       database create \
       --command './compile' \
       --threads 0 \
-      --language java \
+      --language '$(lang)' \
       --github-url 'https://github.com/' \
       --source-root . \
       '../db'
@@ -36,9 +45,10 @@ steps:
       database analyze \
       --threads 0 \
       --format sarif-latest \
+      --sarif-category $(lang) \
       --output '../results.sarif' \
       '../db' \
-      java-security-and-quality.qls
+      $(lang)-security-and-quality.qls
 
     # upload results
     export GITHUB_TOKEN=$(GITHUB_TOKEN)
