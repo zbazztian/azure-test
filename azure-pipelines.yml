@@ -49,3 +49,4 @@ steps:
       --repository 'zbazztian/azure-test' \
       --ref "$BUILD_SOURCEBRANCH" \
       --commit "$(git rev-parse HEAD)"
+
